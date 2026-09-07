@@ -67,7 +67,7 @@ class Plant(Resource):
 
         db.session.commit()
         return plant, 200
-    
+'''    
     @marshal_with(plantFields)
     def delete(self, id):
         plant = PlantModel.query.filter_by(id=id).first()
@@ -80,7 +80,7 @@ class Plant(Resource):
 
         plants = PlantModel.query.all()
         return plants, 204
-      
+'''
 
 api.add_resource(Plants, '/api/plants/')
 api.add_resource(Plant, '/api/plants/<int:id>')
