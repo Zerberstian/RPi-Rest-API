@@ -42,12 +42,28 @@ class Plants(Resource):
         db.session.commit()
         plants = PlantModel.query.all()
         return plants, 201
+ 
+class Plant(Resource):
+    @marshal_with(plantFields)
+    def get(self, id):
+        plant = PlantModel.query.filter_by(id=id).first()
+
+        if not plant: 
+            abort(404, message="Plant not found lol")
+
+        return plant
+      
 
 api.add_resource(Plants, '/api/plants/')
+api.add_resource(Plant, '/api/plants/<int:id>')
 
 @app.route('/')
 def home():
     return '<h1>Flask REST APi</h1>'
+
+print("======== ROUTES ========")
+print(app.url_map)
+print("========================")
 
 if __name__ == '__main__':
     app.run(debug=True)
