@@ -1,10 +1,12 @@
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from flask_restful import Resource, Api, reqparse, fields, marshal_with, abort
+import os
 
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///database.db'
-db =SQLAlchemy(app)
+basedir = os.path.abspath(os.path.dirname(__file__))
+app.config['SQLALCHEMY_DATABASE_URI'] = f'sqlite:///{os.path.join(basedir, "instance", "database.db").replace(chr(92), "/")}'
+db = SQLAlchemy(app)
 api = Api(app)
 
 class PlantModel(db.Model):
@@ -17,12 +19,12 @@ class PlantModel(db.Model):
 
 
 plant_args = reqparse.RequestParser()
-plant_args.add_argument('plant_name', type=str, help='Plant name is required', required=True)
-plant_args.add_argument('waterlevel', type=int, help='Water level is required', required=True)
+plant_args.add_argument('plant_name', type=str, help='Plant name is required', required=True, location='json')
+plant_args.add_argument('waterlevel', type=int, help='Water level is required', required=True, location='json')
 
 plantFields = {
     'id': fields.Integer,
-    'name': fields.String,
+    'plant_name': fields.String,
     'waterlevel': fields.Integer
 } 
 
@@ -35,7 +37,7 @@ class Plants(Resource):
     @marshal_with(plantFields)
     def post(self):
         args = plant_args.parse_args()
-        plant = PlantModel(id=args["id"], name=args["name"], waterlevel=args["waterlevel"])
+        plant = PlantModel(plant_name=args["plant_name"], waterlevel=args["waterlevel"])
         db.session.add(plant)
         db.session.commit()
         plants = PlantModel.query.all()
