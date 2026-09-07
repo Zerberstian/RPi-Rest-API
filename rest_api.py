@@ -52,6 +52,34 @@ class Plant(Resource):
             abort(404, message="Plant not found lol")
 
         return plant
+    
+    @marshal_with(plantFields)
+    def patch(self, id):
+        args = plant_args.parse_args()
+        plant = PlantModel.query.filter_by(id=id).first()
+
+        if not plant: 
+            abort(404, message="Plant not found lol")
+
+        plant.plant_name = args["plant_name"]
+
+        plant.waterlevel = args["waterlevel"]
+
+        db.session.commit()
+        return plant, 200
+    
+    @marshal_with(plantFields)
+    def delete(self, id):
+        plant = PlantModel.query.filter_by(id=id).first()
+
+        if not plant: 
+            abort(404, message="Plant not found lol")
+
+        db.session.delete(plant)
+        db.session.commit()
+
+        plants = PlantModel.query.all()
+        return plants, 204
       
 
 api.add_resource(Plants, '/api/plants/')
