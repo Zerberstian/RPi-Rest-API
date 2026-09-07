@@ -2,6 +2,7 @@ from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from flask_restful import Resource, Api, reqparse, fields, marshal_with, abort
 import os
+
 '''
 file_path = "../x-api-key.txt"
 
@@ -20,6 +21,7 @@ def read_text_file(file_path):
 x_api_key = read_text_file(file_path)
 print(x_api_key)
 '''
+
 app = Flask(__name__)
 basedir = os.path.abspath(os.path.dirname(__file__))
 app.config['SQLALCHEMY_DATABASE_URI'] = f'sqlite:///{os.path.join(basedir, "instance", "database.db").replace(chr(92), "/")}'
@@ -84,7 +86,7 @@ class Plant(Resource):
 
         db.session.commit()
         return plant, 200
-'''    
+'''   
     @marshal_with(plantFields)
     def delete(self, id):
         plant = PlantModel.query.filter_by(id=id).first()
