@@ -2,7 +2,24 @@ from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from flask_restful import Resource, Api, reqparse, fields, marshal_with, abort
 import os
+'''
+file_path = "../x-api-key.txt"
 
+def read_text_file(file_path):
+    """
+    Reads a text file and returns its contents as a string.
+    Includes error handling for common issues.
+    """
+    try:
+        with open(file_path, 'r', encoding='utf-8') as file:
+            content = file.read()
+            return content
+    except FileNotFoundError:
+        print(f"Error: The file '{file_path}' was not found.")
+
+x_api_key = read_text_file(file_path)
+print(x_api_key)
+'''
 app = Flask(__name__)
 basedir = os.path.abspath(os.path.dirname(__file__))
 app.config['SQLALCHEMY_DATABASE_URI'] = f'sqlite:///{os.path.join(basedir, "instance", "database.db").replace(chr(92), "/")}'
