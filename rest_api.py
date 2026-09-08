@@ -13,8 +13,6 @@ def read_text_file(path):
         return f.read().strip()
 
 expected_api_key = read_text_file(file_path)
-print(f"\nKey: {expected_api_key}\n")
-
 
 app = Flask(__name__)
 basedir = os.path.abspath(os.path.dirname(__file__))
