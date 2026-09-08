@@ -1,26 +1,20 @@
-from flask import Flask
+# Flask related Imports
+from flask import Flask, request, jsonify
 from flask_sqlalchemy import SQLAlchemy
 from flask_restful import Resource, Api, reqparse, fields, marshal_with, abort
+# Other Imports
+from pathlib import Path
 import os
 
-'''
-file_path = "../x-api-key.txt"
+file_path = Path(__file__).parent / "x-api_key.txt"
 
-def read_text_file(file_path):
-    """
-    Reads a text file and returns its contents as a string.
-    Includes error handling for common issues.
-    """
-    try:
-        with open(file_path, 'r', encoding='utf-8') as file:
-            content = file.read()
-            return content
-    except FileNotFoundError:
-        print(f"Error: The file '{file_path}' was not found.")
+def read_text_file(path):
+    with open(path, "r", encoding="utf-8") as f:
+        return f.read().strip()
 
-x_api_key = read_text_file(file_path)
-print(x_api_key)
-'''
+expected_api_key = read_text_file(file_path)
+print(f"\nKey: {expected_api_key}\n")
+
 
 app = Flask(__name__)
 basedir = os.path.abspath(os.path.dirname(__file__))
@@ -50,11 +44,21 @@ plantFields = {
 class Plants(Resource):
     @marshal_with(plantFields)
     def get(self):
+        # Key validation
+        received_api_key = request.headers.get("X-API-Key", "")
+        if received_api_key != expected_api_key:
+            abort(401, message="Unauthorized: Invalid API Key")
+
         plants = PlantModel.query.all()
         return plants
 
     @marshal_with(plantFields)
     def post(self):
+        # Key validation
+        received_api_key = request.headers.get("X-API-Key", "")
+        if received_api_key != expected_api_key:
+            abort(401, message="Unauthorized: Invalid API Key")
+
         args = plant_args.parse_args()
         plant = PlantModel(plant_name=args["plant_name"], waterlevel=args["waterlevel"])
         db.session.add(plant)
@@ -65,6 +69,11 @@ class Plants(Resource):
 class Plant(Resource):
     @marshal_with(plantFields)
     def get(self, id):
+        # Key validation
+        received_api_key = request.headers.get("X-API-Key", "")
+        if received_api_key != expected_api_key:
+            abort(401, message="Unauthorized: Invalid API Key")
+
         plant = PlantModel.query.filter_by(id=id).first()
 
         if not plant: 
@@ -74,6 +83,11 @@ class Plant(Resource):
     
     @marshal_with(plantFields)
     def patch(self, id):
+        # Key validation
+        received_api_key = request.headers.get("X-API-Key", "")
+        if received_api_key != expected_api_key:
+            abort(401, message="Unauthorized: Invalid API Key")
+
         args = plant_args.parse_args()
         plant = PlantModel.query.filter_by(id=id).first()
 
@@ -89,6 +103,11 @@ class Plant(Resource):
 '''   
     @marshal_with(plantFields)
     def delete(self, id):
+        # Key validation
+        received_api_key = request.headers.get("X-API-Key", "")
+        if received_api_key != expected_api_key:
+            abort(401, message="Unauthorized: Invalid API Key")
+
         plant = PlantModel.query.filter_by(id=id).first()
 
         if not plant: 
