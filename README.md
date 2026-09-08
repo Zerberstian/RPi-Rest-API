@@ -1,15 +1,33 @@
 # RPi-Rest-API
 
-In the requirements.txt  you can find what you need for the Project to work.
+## Installation and requirements
 
-For Example Pip:
+### best way to get them Project to your PC:
+
+```bash
+git clone URL <- placeholder
+```
+
+### requirements:
+
+note:
+For our API requirements to work you need to be in venv so 
+
+--
+
+In the requirements_api.txt  you can find what you need for the Project to work.
+
+using Pip:
 
 ```bash
 pip install -r requirements_api.txt
 ```
 
+--
 
-## api request mit Key 
+## api request with example Key
+
+here you do tehe request and save the API Output to a Variable: 
 
 ```powershell
 
@@ -18,6 +36,12 @@ PS C:\Users\user\projects\Rapi_API_lol\RPi-Rest-API> $response = Invoke-RestMeth
 >>   -Headers @{
 >>     "X-API-Key" = "abc"
 >>   }
+
+```
+
+get what was saved to the Variable:
+
+```powershell
 PS C:\Users\user\projects\Rapi_API_lol\RPi-Rest-API> $response | ConvertTo-Json -Depth 10
 [
     {
