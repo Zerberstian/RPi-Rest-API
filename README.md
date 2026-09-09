@@ -22,7 +22,13 @@ using Pip:
 ```bash
 pip install -r requirements_api.txt
 ```
+note:
+requests ist not installed in rpi ans Not in req.txt
 
+```bash
+pip install requests
+```
+ 
 --
 
 ## api request with example Key
